@@ -348,8 +348,6 @@ microblog: True
 │     ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝    │
 └─────────────────────────────────────────┘</div>
         
-        <h1>Board Game Quest</h1>
-        <p class="subtitle">Transform learning into an adventure</p>
         
         <h2>Overview</h2>
         <p><span class="highlight">Board Game Quest</span> turns education into a game. Each square on the virtual board represents a learning module. Players start at "Go" and advance by completing challenges and mastering concepts. Flask backend tracks all progress persistently.</p>
