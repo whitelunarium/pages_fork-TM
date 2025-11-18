@@ -786,5 +786,3 @@ microblog: True
 │  🎮 LEVEL UP YOUR SKILLS  •  QUEST AWAITS 🏆  │
 └────────────────────────────────────────────────┘
     </div>
-</body>
-</html>
