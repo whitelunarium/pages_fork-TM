@@ -14,7 +14,7 @@ microblog: True
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Board Game Quest Ideation</title>
+    <title>Board Game Quest</title>
     <style>
         * {
             margin: 0;
@@ -26,7 +26,7 @@ microblog: True
             font-family: 'Courier New', monospace;
             color: #e0e0e0;
             padding: 40px 20px;
-            line-height: 1.8;
+            line-height: 1.7;
         }
         
         .container {
@@ -45,36 +45,34 @@ microblog: True
         
         h1 {
             color: #ff6b9d;
-            font-size: 3em;
-            margin: 30px 0 10px 0;
+            font-size: 2.5em;
+            margin: 20px 0;
             text-shadow: 0 0 10px rgba(255, 107, 157, 0.5);
-            letter-spacing: 2px;
         }
         
         .subtitle {
             color: #00ff88;
-            font-size: 1.1em;
-            margin-bottom: 40px;
+            font-size: 1em;
+            margin-bottom: 30px;
             font-style: italic;
         }
         
         h2 {
             color: #ffaa00;
-            font-size: 1.8em;
-            margin: 50px 0 20px 0;
-            border-left: 5px solid #ffaa00;
-            padding-left: 15px;
+            font-size: 1.6em;
+            margin: 40px 0 15px 0;
+            border-left: 4px solid #ffaa00;
+            padding-left: 12px;
         }
         
         h3 {
             color: #00d4ff;
-            font-size: 1.3em;
-            margin: 30px 0 15px 0;
+            font-size: 1.2em;
+            margin: 25px 0 12px 0;
         }
         
         p {
-            margin: 15px 0;
-            text-align: justify;
+            margin: 12px 0;
         }
         
         .highlight {
@@ -84,12 +82,12 @@ microblog: True
         
         ul {
             list-style: none;
-            margin: 15px 0;
+            margin: 12px 0;
         }
         
         ul li {
-            margin: 8px 0;
-            padding-left: 25px;
+            margin: 6px 0;
+            padding-left: 20px;
             position: relative;
         }
         
@@ -101,8 +99,8 @@ microblog: True
         }
         
         .board-demo {
-            margin: 40px 0;
-            padding: 30px;
+            margin: 30px 0;
+            padding: 25px;
             background: #151933;
             border: 2px solid #00ff88;
             border-radius: 8px;
@@ -111,8 +109,8 @@ microblog: True
         .board-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-            margin: 20px 0;
+            gap: 8px;
+            margin: 15px 0;
         }
         
         .board-square {
@@ -121,10 +119,18 @@ microblog: True
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.8em;
+            font-size: 0.75em;
             text-align: center;
             padding: 5px;
             transition: all 0.3s ease;
+        }
+        
+        .chess-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 0;
+            margin: 15px 0;
+            border: 3px solid #00ff88;
         }
         
         .chess-square {
@@ -133,172 +139,105 @@ microblog: True
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.65em;
+            font-size: 0.6em;
             text-align: center;
-            padding: 5px;
-            transition: all 0.3s ease;
+            padding: 4px;
         }
         
-        .chess-square.dark {
-            background: #1a1a2a;
-        }
+        .chess-square.dark { background: #1a1a2a; }
+        .chess-square.light { background: #0f0f1a; }
+        .chess-square.dark.completed { background: #1a3a1a; border-color: #00ff88; color: #00ff88; }
+        .chess-square.light.completed { background: #0f2a0f; border-color: #00ff88; color: #00ff88; }
+        .chess-square.dark.current { background: #3a1a3a; border-color: #ff6b9d; color: #ff6b9d; }
+        .chess-square.light.current { background: #2a0f2a; border-color: #ff6b9d; color: #ff6b9d; }
+        .chess-square.dark.start, .chess-square.light.start { background: linear-gradient(135deg, #00ff88, #00aa66); color: #000; font-weight: bold; }
+        .chess-square.locked { color: #666; }
         
-        .chess-square.light {
-            background: #0f0f1a;
-        }
-        
-        .chess-square.dark.completed {
-            background: #1a3a1a;
-            border-color: #00ff88;
-            color: #00ff88;
-        }
-        
-        .chess-square.light.completed {
-            background: #0f2a0f;
-            border-color: #00ff88;
-            color: #00ff88;
-        }
-        
-        .chess-square.dark.current {
-            background: #3a1a3a;
-            border-color: #ff6b9d;
-            color: #ff6b9d;
-            animation: pulse 2s infinite;
-        }
-        
-        .chess-square.light.current {
-            background: #2a0f2a;
-            border-color: #ff6b9d;
-            color: #ff6b9d;
-            animation: pulse 2s infinite;
-        }
-        
-        .chess-square.dark.start {
-            background: linear-gradient(135deg, #00ff88, #00aa66);
-            color: #000;
-            font-weight: bold;
-            border-color: #00ff88;
-        }
-        
-        .chess-square.light.start {
-            background: linear-gradient(135deg, #00ff88, #00aa66);
-            color: #000;
-            font-weight: bold;
-            border-color: #00ff88;
-        }
-        
-        .chess-square.locked {
-            color: #666;
-        }
-        
-        .board-square.start {
-            background: linear-gradient(135deg, #00ff88, #00aa66);
-            color: #000;
-            font-weight: bold;
-            border-color: #00ff88;
-        }
-        
-        .board-square.completed {
-            background: #1a3a1a;
-            border-color: #00ff88;
-            color: #00ff88;
-        }
-        
-        .board-square.current {
-            background: #3a1a3a;
-            border-color: #ff6b9d;
-            color: #ff6b9d;
-            animation: pulse 2s infinite;
-        }
-        
-        .board-square.locked {
-            background: #1a1a2a;
-            border-color: #333;
-            color: #666;
-        }
-        
-        .board-square.ladder {
-            background: #2a2a00;
-            border-color: #ffaa00;
-            color: #ffaa00;
-        }
-        
-        .board-square.snake {
-            background: #2a0000;
-            border-color: #ff4444;
-            color: #ff4444;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 5px #ff6b9d; }
-            50% { box-shadow: 0 0 20px #ff6b9d; }
-        }
+        .board-square.start { background: linear-gradient(135deg, #00ff88, #00aa66); color: #000; font-weight: bold; border-color: #00ff88; }
+        .board-square.completed { background: #1a3a1a; border-color: #00ff88; color: #00ff88; }
+        .board-square.current { background: #3a1a3a; border-color: #ff6b9d; color: #ff6b9d; }
+        .board-square.locked { background: #1a1a2a; border-color: #333; color: #666; }
+        .board-square.ladder { background: #2a2a00; border-color: #ffaa00; color: #ffaa00; }
+        .board-square.snake { background: #2a0000; border-color: #ff4444; color: #ff4444; }
         
         .legend {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             flex-wrap: wrap;
-            margin-top: 20px;
-            font-size: 0.9em;
+            margin-top: 15px;
+            font-size: 0.85em;
         }
         
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
         
         .legend-box {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             border: 2px solid;
-        }
-        
-        .feature-list {
-            margin: 30px 0;
-        }
-        
-        .feature-item {
-            margin: 25px 0;
-            padding-left: 30px;
-            border-left: 3px solid transparent;
-            transition: all 0.3s ease;
-        }
-        
-        .feature-item:hover {
-            border-left-color: #ff6b9d;
-            padding-left: 35px;
         }
         
         .tech-item {
             display: inline-block;
-            padding: 5px 12px;
-            margin: 5px;
+            padding: 4px 10px;
+            margin: 4px;
             border: 1px solid #00d4ff;
             border-radius: 3px;
             color: #00d4ff;
-            font-size: 0.9em;
+            font-size: 0.85em;
         }
         
         .divider {
             height: 2px;
             background: linear-gradient(to right, transparent, #ff6b9d, transparent);
-            margin: 50px 0;
+            margin: 40px 0;
+        }
+        
+        code {
+            color: #00d4ff;
+            background: #1a1a2a;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 15px 0;
+        }
+        
+        .stat-box {
+            background: #0f0f1a;
+            padding: 12px;
+            border-left: 3px solid;
+        }
+        
+        .stat-label {
+            font-size: 0.8em;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            color: #fff;
+            font-size: 1.5em;
         }
         
         .footer-note {
             text-align: center;
-            margin-top: 60px;
+            margin-top: 50px;
             color: #00ff88;
             font-style: italic;
-            font-size: 1.1em;
+            font-size: 1em;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="ascii-art">
-┌─────────────────────────────────────────┐
+        <div class="ascii-art">┌─────────────────────────────────────────┐
 │  ████████╗ █████╗ ███████╗██╗  ██╗    │
 │  ╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝    │
 │     ██║   ███████║███████╗█████╔╝     │
@@ -308,23 +247,23 @@ microblog: True
 └─────────────────────────────────────────┘</div>
         
         <h1>Board Game Quest</h1>
-        <p class="subtitle">Board Game Quest</p>
+        <p class="subtitle">Transform learning into an adventure</p>
         
-        <h2> Overview </h2>
-        <p><span class="highlight">Board Game Quest</span> transforms learning into an adventure. Picture a virtual game board where every square is a gateway to knowledge—a learning module waiting to be conquered. Starting at <span class="highlight">"Go"</span>, players advance through the board by mastering concepts, answering challenges, and completing skill-building tasks.</p>
+        <h2>Overview</h2>
+        <p><span class="highlight">Board Game Quest</span> turns education into a game. Each square on the virtual board represents a learning module. Players start at "Go" and advance by completing challenges and mastering concepts. Flask backend tracks all progress persistently.</p>
         
         <div class="board-demo">
-            <h3>Option 1: Snakes & Ladders Style</h3>
-            <p style="font-size: 0.9em; margin-bottom: 20px;">Classic snakes and ladders board where each square is a coding concept:</p>
-            <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 20px 0;">
+            <h3>Option 1: Snakes & Ladders</h3>
+            <p style="font-size: 0.85em; margin-bottom: 15px;">Classic board where concepts unlock sequentially:</p>
+            <div class="board-grid">
                 <div class="board-square start">START</div>
                 <div class="board-square completed">Variables</div>
-                <div class="board-square completed">Data Types</div>
+                <div class="board-square completed">Types</div>
                 <div class="board-square completed">Operators</div>
                 <div class="board-square ladder">⬆️ LADDER</div>
                 
                 <div class="board-square locked">Functions</div>
-                <div class="board-square locked">Conditionals</div>
+                <div class="board-square locked">If/Else</div>
                 <div class="board-square current">Loops</div>
                 <div class="board-square completed">Lists</div>
                 <div class="board-square completed">Dicts</div>
@@ -347,13 +286,13 @@ microblog: True
                 <div class="board-square locked">Debug</div>
                 <div class="board-square locked">🏆 FINISH</div>
             </div>
-            <p style="font-size: 0.85em; color: #00ff88; margin-top: 15px;">↗️ Ladders skip you ahead when you excel | ↙️ Snakes send you back to review fundamentals</p>
+            <p style="font-size: 0.8em; color: #00ff88;">Ladders skip ahead on excellence | Snakes review fundamentals</p>
         </div>
 
-        <div class="board-demo" style="margin-top: 40px;">
-            <h3>Option 2: Chess Board Style</h3>
-            <p style="font-size: 0.9em; margin-bottom: 20px;">8x8 chess-style board with alternating pattern and strategic paths:</p>
-            <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 0; margin: 20px 0; border: 3px solid #00ff88;">
+        <div class="board-demo">
+            <h3>Option 2: Chess Board</h3>
+            <p style="font-size: 0.85em; margin-bottom: 15px;">8x8 grid with strategic paths through 64 concepts:</p>
+            <div class="chess-grid">
                 <div class="chess-square dark locked">Deploy</div>
                 <div class="chess-square light locked">Testing</div>
                 <div class="chess-square dark locked">Security</div>
@@ -426,10 +365,10 @@ microblog: True
                 <div class="chess-square light completed">Boolean</div>
                 <div class="chess-square dark completed">Compare</div>
             </div>
-            <p style="font-size: 0.85em; color: #00ff88; margin-top: 15px;">♟️ Navigate strategically through 64 coding concepts | Each row = new skill tier</p>
+            <p style="font-size: 0.8em; color: #00ff88;">Navigate 64 concepts | Each row = new skill tier</p>
         </div>
             
-        <div class="legend" style="margin-top: 30px;">
+        <div class="legend">
             <div class="legend-item">
                 <div class="legend-box" style="background: linear-gradient(135deg, #00ff88, #00aa66); border-color: #00ff88;"></div>
                 <span>Start</span>
@@ -456,333 +395,166 @@ microblog: True
             </div>
         </div>
         
-        <h2> Core Mechanics </h2>
+        <h2>Core Features</h2>
         
-        <h3>Progressive Learning Journey</h3>
-        <p>Players navigate through the board sequentially, with each completed module unlocking the next challenge. The experience is designed to be:</p>
+        <h3>Progressive Unlocking</h3>
         <ul>
-            <li><span class="highlight">Persistent:</span> Flask-powered backend logs all progress to a database</li>
-            <li><span class="highlight">Resumable:</span> Pick up exactly where you left off in any session</li>
-            <li><span class="highlight">Structured:</span> Clear pathways guide learners from basics to mastery</li>
+            <li>Sequential module progression with database-tracked checkpoints</li>
+            <li>Resume from last position in any session</li>
+            <li>Visual feedback on completed, current, and locked content</li>
         </ul>
         
-        <h3>Interactive Game Board</h3>
-        <p>The centerpiece is a vibrant, animated board interface that provides:</p>
+        <h3>Interactive Modules</h3>
         <ul>
-            <li>Real-time position tracking across all modules</li>
-            <li>Visual indicators of completed and upcoming challenges</li>
-            <li>Engaging animations that celebrate progress milestones</li>
-            <li>Intuitive navigation between learning stations</li>
+            <li>Bite-sized lessons with quizzes and instant feedback</li>
+            <li>Animated board celebrating progress milestones</li>
+            <li>Self-contained topics for focused learning sessions</li>
         </ul>
-        
-        <h3>Bite-Sized Modules</h3>
-        <p>Each square on the board opens a focused learning experience with mini-lessons, interactive quizzes, immediate feedback, and self-contained topics for manageable learning sessions.</p>
         
         <div class="divider"></div>
         
-        <h2> Future Enhancements </h2>
+        <h2>Future Enhancements</h2>
         
-        <div class="feature-list">
-            <div class="feature-item">
-                <h3>Multiplayer Mode</h3>
-                <p>Transform solo learning into a shared experience. Compete in head-to-head challenges or team up to tackle difficult modules together. See friends' progress on the board in real-time.</p>
-            </div>
-            
-            <div class="feature-item">
-                <h3>Achievements & Badges</h3>
-                <p>Celebrate milestones with visual rewards that showcase player dedication and skill mastery. Earn special badges for completing challenges without using hints or finishing modules in record time.</p>
-            </div>
-            
-            <div class="feature-item">
-                <h3>Custom Boards</h3>
-                <p>Empower educators and trainers to design tailored learning paths that align with specific curricula or training programs. Upload custom content and arrange modules in any order.</p>
-            </div>
-            
-            <div class="feature-item">
-                <h3>Dynamic Difficulty</h3>
-                <p>The system analyzes performance patterns and adjusts challenge levels to maintain optimal engagement—neither too easy nor frustratingly hard. Adaptive quizzes respond to user skill level.</p>
-            </div>
-            
-            <div class="feature-item">
-                <h3>Ladders</h3>
-                <p>Excel at challenging modules to earn shortcuts! Landing on a ladder square after a stellar performance propels players forward, letting them skip intermediate content and jump to advanced topics.</p>
-            </div>
-            
-            <div class="feature-item">
-                <h3>Snakes</h3>
-                <p>Struggling with core concepts? Sliding down a snake sends players back to foundational material, reinforcing essential knowledge before proceeding. It's not punishment—it's smart learning.</p>
-            </div>
-        </div>
+        <h3>Multiplayer & Social</h3>
+        <p>Compete head-to-head, join guilds (up to 20 players), share progress in real-time, and tackle collaborative guild quests.</p>
         
-        <div class="divider"></div>
-        
-        <h2> Advanced Feature Roadmap</h2>
-        
-        <div class="feature-list">
-            <div class="feature-item">
-                <h3>Power-Ups & Boosts</h3>
-                <p>Earn special items throughout your journey that enhance your learning experience. <span class="highlight">Hint Tokens</span> reveal clues for tough questions, <span class="highlight">Double XP Boosts</span> amplify progress for a limited time, and <span class="highlight">Skip Cards</span> let you bypass one challenging module (but you'll still need to master it later). Store power-ups in your inventory and use them strategically!</p>
-            </div>
-            
-            <div class="feature-item">
-                <h3>Daily Challenges & Streaks</h3>
-                <p>Keep the learning momentum going with daily coding puzzles that appear on your dashboard. Complete challenges to earn bonus XP and maintain your streak counter. Miss a day? Use a <span class="highlight">Streak Freeze</span> power-up to protect your progress. Weekly leaderboards showcase the most dedicated learners.</p>
-            </div>
-            
-            <div class="feature-item">
-                <h3>Boss Battles</h3>
-                <p>At key milestones (every 10 squares), face epic <span class="highlight">Boss Challenges</span> that test everything you've learned. These multi-part quests combine multiple concepts into real-world scenarios. Defeat a boss to unlock exclusive badges and rare power-ups. Boss battles have time limits and no hints—only your mastered skills!</p>
-            </div>
-            
-            <div class="feature-item">
-                <h3>Study Groups & Guilds</h3>
-                <p>Join or create learning guilds with up to 20 players. Share progress, compete in guild tournaments, and collaborate on special <span class="highlight">Guild Quests</span> that require teamwork. Guild chat lets you discuss concepts and help each other. Top-performing guilds earn exclusive cosmetic themes for their game boards.</p>
-            </div>
-            
-            <div class="feature-item">
-                <h3>Time Attack Mode</h3>
-                <p>For advanced learners seeking extra challenge, enable Time Attack mode where each module must be completed within a countdown timer. Beat the clock to earn <span class="highlight">Speed Bonuses</span> and climb the Time Attack leaderboard. This mode is perfect for certification prep or skill assessment.</p>
-            </div>
-        </div>
-        
-        <div class="divider"></div>
-        
-        <h2> Progress Tracking & Analytics</h2>
-        
-        <h3>Student Dashboard</h3>
-        <p>Every learner gets a comprehensive personal dashboard powered by Flask sessions and database queries:</p>
+        <h3>Progression Systems</h3>
         <ul>
-            <li><span class="highlight">Visual Board Map:</span> Interactive game board showing current position, completed squares (green), locked squares (gray), and next objectives (pulsing pink)</li>
-            <li><span class="highlight">Stats Overview:</span> Total modules completed, accuracy percentage, average time per module, current streak count, and total XP earned</li>
-            <li><span class="highlight">Performance Graphs:</span> Chart.js-powered visualizations showing learning velocity over time, strongest/weakest topics, and skill progression curves</li>
-            <li><span class="highlight">Achievement Gallery:</span> Display earned badges with unlock dates, rare power-ups in inventory, and progress toward next milestone rewards</li>
-            <li><span class="highlight">Recent Activity Feed:</span> Timeline of completed modules, earned achievements, and friend interactions</li>
-            <li><span class="highlight">Smart Recommendations:</span> AI-suggested next steps based on performance patterns—"You excel at loops! Try the advanced iteration module next."</li>
+            <li><span class="highlight">Achievements:</span> Badges for milestones, speed runs, and perfect scores</li>
+            <li><span class="highlight">Power-Ups:</span> Hint tokens, XP boosts, skip cards earned through play</li>
+            <li><span class="highlight">Daily Challenges:</span> Bonus puzzles with streak tracking and leaderboards</li>
+            <li><span class="highlight">Boss Battles:</span> Multi-part quests every 10 squares testing cumulative knowledge</li>
         </ul>
+        
+        <h3>Adaptive Difficulty</h3>
+        <p>AI adjusts challenge levels based on performance patterns. Ladders skip advanced learners forward; snakes review fundamentals for struggling students.</p>
+        
+        <div class="divider"></div>
+        
+        <h2>Student Dashboard</h2>
         
         <div class="board-demo">
-            <h3>Example Student View</h3>
-            <div style="background: #1a1a2a; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                <p style="font-size: 0.95em; color: #00ff88; margin-bottom: 15px;">📍 Current Position: Square 15 - "Object-Oriented Programming"</p>
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 15px 0;">
-                    <div style="background: #0f0f1a; padding: 15px; border-left: 3px solid #00ff88;">
-                        <div style="color: #00ff88; font-size: 0.85em;">Modules Completed</div>
-                        <div style="color: #fff; font-size: 1.8em; margin-top: 5px;">14 / 50</div>
-                    </div>
-                    <div style="background: #0f0f1a; padding: 15px; border-left: 3px solid #ffaa00;">
-                        <div style="color: #ffaa00; font-size: 0.85em;">Accuracy Rate</div>
-                        <div style="color: #fff; font-size: 1.8em; margin-top: 5px;">87%</div>
-                    </div>
-                    <div style="background: #0f0f1a; padding: 15px; border-left: 3px solid #ff6b9d;">
-                        <div style="color: #ff6b9d; font-size: 0.85em;">Current Streak</div>
-                        <div style="color: #fff; font-size: 1.8em; margin-top: 5px;">7 days 🔥</div>
-                    </div>
-                    <div style="background: #0f0f1a; padding: 15px; border-left: 3px solid #00d4ff;">
-                        <div style="color: #00d4ff; font-size: 0.85em;">Total XP</div>
-                        <div style="color: #fff; font-size: 1.8em; margin-top: 5px;">3,450</div>
-                    </div>
+            <p style="font-size: 0.9em; color: #00ff88; margin-bottom: 12px;">📍 Current: Square 15 - "Object-Oriented Programming"</p>
+            <div class="stats-grid">
+                <div class="stat-box" style="border-color: #00ff88;">
+                    <div class="stat-label" style="color: #00ff88;">Completed</div>
+                    <div class="stat-value">14 / 50</div>
                 </div>
-                <p style="font-size: 0.85em; color: #aaa; margin-top: 15px;">🎯 Next Milestone: Complete 5 more modules to unlock Boss Battle #2</p>
+                <div class="stat-box" style="border-color: #ffaa00;">
+                    <div class="stat-label" style="color: #ffaa00;">Accuracy</div>
+                    <div class="stat-value">87%</div>
+                </div>
+                <div class="stat-box" style="border-color: #ff6b9d;">
+                    <div class="stat-label" style="color: #ff6b9d;">Streak</div>
+                    <div class="stat-value">7 days 🔥</div>
+                </div>
+                <div class="stat-box" style="border-color: #00d4ff;">
+                    <div class="stat-label" style="color: #00d4ff;">Total XP</div>
+                    <div class="stat-value">3,450</div>
+                </div>
             </div>
+            <p style="font-size: 0.8em; color: #aaa; margin-top: 12px;">🎯 Next: Complete 5 modules to unlock Boss Battle #2</p>
         </div>
         
-        <h3>Admin Control Panel</h3>
-        <p>Teachers and administrators access a powerful Flask-powered dashboard with comprehensive oversight:</p>
+        <h3>Includes</h3>
         <ul>
-            <li><span class="highlight">User Management:</span> View all registered students, search/filter by progress level, manually reset progress or unlock modules for specific users</li>
-            <li><span class="highlight">Class Analytics:</span> Aggregate statistics across all learners—average completion rate, most difficult modules (by failure rate), popular learning times</li>
-            <li><span class="highlight">Individual Progress Reports:</span> Drill down into any student's complete history—module completion timestamps, question-by-question results, time spent per topic, hint usage patterns</li>
-            <li><span class="highlight">Content Management:</span> Add/edit/remove learning modules through web forms, adjust difficulty levels, update quiz questions, enable/disable snakes and ladders</li>
-            <li><span class="highlight">Real-Time Monitoring:</span> Live dashboard showing currently active users, modules being attempted right now, recent completions streaming in</li>
-            <li><span class="highlight">Export Functionality:</span> Download CSV reports for external analysis, generate printable certificates for course completion, export grade books for LMS integration</li>
-            <li><span class="highlight">Intervention Tools:</span> Flag struggling students automatically based on metrics, send encouragement messages, assign remedial modules, schedule one-on-one reviews</li>
+            <li>Interactive board map with visual progress indicators</li>
+            <li>Performance graphs (Chart.js) showing learning velocity and skill progression</li>
+            <li>Achievement gallery with badges and power-up inventory</li>
+            <li>AI recommendations based on performance patterns</li>
         </ul>
+        
+        <h2>Admin Dashboard</h2>
         
         <div class="board-demo">
-            <h3>Example Admin Dashboard</h3>
-            <div style="background: #1a1a2a; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                <p style="font-size: 1.1em; color: #ff6b9d; margin-bottom: 20px; font-weight: bold;">📊 Class Overview: CSP Period 3</p>
-                <div style="background: #0f0f1a; padding: 15px; border-radius: 5px; margin-bottom: 15px;">
-                    <div style="color: #00ff88; font-size: 0.9em; margin-bottom: 10px;">Active Students Today: 23 / 28</div>
-                    <div style="height: 10px; background: #1a1a2a; border-radius: 5px; overflow: hidden;">
-                        <div style="width: 82%; height: 100%; background: linear-gradient(90deg, #00ff88, #00aa66);"></div>
-                    </div>
+            <p style="font-size: 1em; color: #ff6b9d; margin-bottom: 15px; font-weight: bold;">📊 Class Overview: CSP Period 3</p>
+            <div style="background: #0f0f1a; padding: 12px; border-radius: 5px; margin-bottom: 12px;">
+                <div style="color: #00ff88; font-size: 0.85em; margin-bottom: 8px;">Active Students: 23 / 28 (82%)</div>
+                <div style="height: 8px; background: #1a1a2a; border-radius: 4px; overflow: hidden;">
+                    <div style="width: 82%; height: 100%; background: linear-gradient(90deg, #00ff88, #00aa66);"></div>
                 </div>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 15px 0;">
-                    <div style="background: #0f0f1a; padding: 12px; text-align: center;">
-                        <div style="color: #00d4ff; font-size: 0.8em;">Avg Progress</div>
-                        <div style="color: #fff; font-size: 1.5em; margin-top: 5px;">34%</div>
-                    </div>
-                    <div style="background: #0f0f1a; padding: 12px; text-align: center;">
-                        <div style="color: #ffaa00; font-size: 0.8em;">Struggling</div>
-                        <div style="color: #fff; font-size: 1.5em; margin-top: 5px;">4</div>
-                    </div>
-                    <div style="background: #0f0f1a; padding: 12px; text-align: center;">
-                        <div style="color: #00ff88; font-size: 0.8em;">Completed</div>
-                        <div style="color: #fff; font-size: 1.5em; margin-top: 5px;">2</div>
-                    </div>
-                </div>
-                <p style="font-size: 0.85em; color: #ff6b9d; margin-top: 15px;">⚠️ 4 students haven't logged in for 5+ days - send reminder email?</p>
             </div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                <div style="background: #0f0f1a; padding: 10px; text-align: center;">
+                    <div style="color: #00d4ff; font-size: 0.75em;">Avg Progress</div>
+                    <div style="color: #fff; font-size: 1.3em; margin-top: 4px;">34%</div>
+                </div>
+                <div style="background: #0f0f1a; padding: 10px; text-align: center;">
+                    <div style="color: #ffaa00; font-size: 0.75em;">Struggling</div>
+                    <div style="color: #fff; font-size: 1.3em; margin-top: 4px;">4</div>
+                </div>
+                <div style="background: #0f0f1a; padding: 10px; text-align: center;">
+                    <div style="color: #00ff88; font-size: 0.75em;">Completed</div>
+                    <div style="color: #fff; font-size: 1.3em; margin-top: 4px;">2</div>
+                </div>
+            </div>
+            <p style="font-size: 0.8em; color: #ff6b9d; margin-top: 12px;">⚠️ 4 students inactive 5+ days - send reminder?</p>
         </div>
+        
+        <h3>Features</h3>
+        <ul>
+            <li>User management with progress reset and manual unlocks</li>
+            <li>Class analytics: completion rates, difficult modules, usage patterns</li>
+            <li>Individual drill-down: timestamps, answers, time spent, hints used</li>
+            <li>Content management: add/edit modules, adjust difficulty via web forms</li>
+            <li>Export to CSV, generate certificates, LMS integration</li>
+            <li>Auto-flag struggling students with intervention tools</li>
+        </ul>
         
         <div class="divider"></div>
         
-        <h2> Technical Implementation</h2>
+        <h2>Technical Stack</h2>
         
-        <h3>Flask Backend Architecture</h3>
-        <p>The application leverages Flask's robust framework for seamless data management:</p>
+        <h3>Backend</h3>
+        <div style="margin: 15px 0;">
+            <span class="tech-item">Flask-SQLAlchemy</span>
+            <span class="tech-item">Flask-Login</span>
+            <span class="tech-item">Flask-WTF</span>
+            <span class="tech-item">Flask-Session</span>
+            <span class="tech-item">SQLite/PostgreSQL</span>
+        </div>
         
-        <div class="tech-item">Flask-SQLAlchemy</div>
-        <div class="tech-item">Flask-Login</div>
-        <div class="tech-item">Flask-WTF</div>
-        <div class="tech-item">Flask-Session</div>
-        <div class="tech-item">SQLite/PostgreSQL</div>
-        
-        <h3 style="margin-top: 30px;">Database Schema</h3>
+        <h3>Database Schema</h3>
         <div class="board-demo">
-            <pre style="color: #00ff88; font-size: 0.85em; line-height: 1.6;">
-<span style="color: #ff6b9d;">Users Table:</span>
-├─ user_id (PK)
-├─ username
-├─ email
-├─ password_hash
-├─ role (student/admin)
-├─ created_at
-└─ last_login
-
-<span style="color: #ff6b9d;">Progress Table:</span>
-├─ progress_id (PK)
-├─ user_id (FK)
-├─ current_square
-├─ total_xp
-├─ accuracy_rate
-├─ streak_count
-└─ last_updated
-
-<span style="color: #ff6b9d;">Completed_Modules Table:</span>
-├─ completion_id (PK)
-├─ user_id (FK)
-├─ module_id
-├─ score
-├─ time_taken
-├─ hints_used
-└─ completed_at
-
-<span style="color: #ff6b9d;">Achievements Table:</span>
-├─ achievement_id (PK)
-├─ user_id (FK)
-├─ badge_type
-├─ earned_at
-└─ description
-
-<span style="color: #ff6b9d;">Power_Ups Table:</span>
-├─ powerup_id (PK)
-├─ user_id (FK)
-├─ item_type
-├─ quantity
-└─ acquired_at</pre>
+            <pre style="color: #00ff88; font-size: 0.8em; line-height: 1.5;">
+<span style="color: #ff6b9d;">Users:</span> user_id, username, email, password_hash, role, timestamps
+<span style="color: #ff6b9d;">Progress:</span> progress_id, user_id, current_square, total_xp, accuracy, streak
+<span style="color: #ff6b9d;">Completed_Modules:</span> completion_id, user_id, module_id, score, time, hints
+<span style="color: #ff6b9d;">Achievements:</span> achievement_id, user_id, badge_type, earned_at
+<span style="color: #ff6b9d;">Power_Ups:</span> powerup_id, user_id, item_type, quantity</pre>
         </div>
         
-        <h3>Key Flask Routes</h3>
+        <h3>Key Routes</h3>
         <ul>
-            <li><span class="highlight">/dashboard:</span> Renders student progress view with database queries</li>
-            <li><span class="highlight">/game-board:</span> Interactive board interface with real-time position</li>
-            <li><span class="highlight">/module/&lt;int:id&gt;:</span> Loads specific learning module content</li>
-            <li><span class="highlight">/submit-answer:</span> POST endpoint to validate answers and update progress</li>
-            <li><span class="highlight">/admin/analytics:</span> Admin-only analytics dashboard</li>
-            <li><span class="highlight">/admin/users:</span> User management interface</li>
-            <li><span class="highlight">/api/progress:</span> JSON endpoint for AJAX progress updates</li>
-            <li><span class="highlight">/leaderboard:</span> Global rankings and guild standings</li>
+            <li><code>/dashboard</code> - Student progress view</li>
+            <li><code>/game-board</code> - Interactive board interface</li>
+            <li><code>/module/&lt;id&gt;</code> - Learning module content</li>
+            <li><code>/submit-answer</code> - POST: validate and update progress</li>
+            <li><code>/admin/analytics</code> - Admin analytics dashboard</li>
+            <li><code>/api/progress</code> - JSON for AJAX updates</li>
         </ul>
         
-        <h3>Progressive Unlocking Logic</h3>
-        <p>Flask backend enforces strict sequential progression:</p>
+        <h3>Logic</h3>
         <ul>
-            <li>Check user's <code style="color: #00d4ff;">current_square</code> value before allowing module access</li>
-            <li>Validate quiz submissions and update database on success</li>
-            <li>Increment <code style="color: #00d4ff;">current_square</code> only after passing threshold (e.g., 70% accuracy)</li>
-            <li>Handle snake/ladder mechanics: modify <code style="color: #00d4ff;">current_square</code> based on performance triggers</li>
-            <li>Award XP, badges, and power-ups through database insertions</li>
+            <li>Check <code>current_square</code> before granting module access</li>
+            <li>Validate submissions, increment position on passing threshold (70%+)</li>
+            <li>Snakes/ladders modify position based on performance triggers</li>
+            <li>Award XP, badges, power-ups via database insertions</li>
         </ul>
         
         <div class="divider"></div>
         
-        <h2> Gamification Psychology</h2>
-        
-        <h3>Motivation Through Design</h3>
-        <p>Board Game Quest applies proven game design principles to maximize engagement:</p>
-        
-        <div class="feature-item">
-            <h3> Clear Goals & Milestones</h3>
-            <p>The physical game board provides constant visual feedback—you can literally <span class="highlight">see</span> your progress and how far you've come. Every square represents a concrete achievement. Boss battles at regular intervals create exciting sub-goals beyond just reaching the end.</p>
-        </div>
-        
-        <div class="feature-item">
-            <h3> Immediate Feedback</h3>
-            <p>No waiting for graded assignments. Answer a question and instantly know if you're right, with detailed explanations for wrong answers. Watch your XP counter tick up in real-time. See the board animate as you advance to the next square.</p>
-        </div>
-        
-        <div class="feature-item">
-            <h3> Achievement Recognition</h3>
-            <p>Badges, streaks, leaderboards, and guild rankings satisfy our innate desire for recognition and status. Rare achievements for exceptional performance make learners feel special. Profile showcases let students display their accomplishments.</p>
-        </div>
-        
-        <div class="feature-item">
-            <h3> Controlled Randomness</h3>
-            <p>Snakes and ladders introduce an element of surprise and excitement. Random power-up drops after completing modules create "loot box" anticipation. Daily challenges vary to prevent monotony while maintaining structure.</p>
-        </div>
-        
-        <div class="feature-item">
-            <h3> Social Connection</h3>
-            <p>Guilds, leaderboards, and multiplayer modes tap into social motivation. Seeing friends' progress creates friendly competition. Helping guild members reinforces learning through teaching. Shared struggles build community.</p>
-        </div>
-        
-        <div class="divider"></div>
-        
-        <h2> Deployment & Scalability</h2>
-        
-        <h3>Hosting Infrastructure</h3>
+        <h2>Deployment</h2>
         <ul>
-            <li><span class="highlight">Development:</span> Local Flask server with SQLite for testing</li>
-            <li><span class="highlight">Production:</span> Deploy to Heroku, AWS, or Digital Ocean with PostgreSQL</li>
-            <li><span class="highlight">Static Assets:</span> Host CSS/JS/images on CDN for faster loading</li>
-            <li><span class="highlight">Database Backups:</span> Automated daily backups to prevent data loss</li>
-            <li><span class="highlight">Session Management:</span> Redis for fast session storage at scale</li>
+            <li><span class="highlight">Dev:</span> Local Flask + SQLite</li>
+            <li><span class="highlight">Prod:</span> Heroku/AWS/DigitalOcean + PostgreSQL + Redis sessions</li>
+            <li><span class="highlight">Optimization:</span> DB indexing, SQLAlchemy lazy loading, AJAX updates, pagination</li>
+            <li><span class="highlight">Mobile:</span> Responsive design, touch controls, swipe navigation, offline caching</li>
         </ul>
         
-        <h3>Performance Optimization</h3>
-        <ul>
-            <li>Database indexing on frequently queried fields (user_id, module_id)</li>
-            <li>Query optimization with SQLAlchemy lazy loading</li>
-            <li>Client-side caching of static board layouts</li>
-            <li>AJAX updates for real-time features without page reloads</li>
-            <li>Pagination for admin views with large user bases</li>
-        </ul>
-        
-        <div class="divider"></div>
-        
-        <h2> Mobile Experience</h2>
-        
-        <h3>Responsive Design</h3>
-        <p>Learn anywhere, anytime with a fully responsive interface:</p>
-        <ul>
-            <li>Board adapts to portrait/landscape orientations</li>
-            <li>Touch-optimized square selection</li>
-            <li>Swipe gestures for board navigation</li>
-            <li>Mobile-friendly quiz interfaces with large tap targets</li>
-            <li>Push notifications for daily challenges and streak reminders</li>
-            <li>Offline mode caches current module for learning without internet</li>
-        </ul>
-        
-        <div class="divider"></div>
-        
-        <p class="footer-note">
-            "Learning is not a spectator sport. Board Game Quest makes you an active player in your own education."
-        </p>
-        
-        <div class="ascii-art" style="margin-top: 40px; margin-bottom: 20px;">
-┌────────────────────────────────────────────────┐
+        <div class="ascii-art" style="margin-top: 40px;">┌────────────────────────────────────────────────┐
 │  🎮 LEVEL UP YOUR SKILLS  •  QUEST AWAITS 🏆  │
-└────────────────────────────────────────────────┘
+└────────────────────────────────────────────────┘</div>
     </div>
+</body>
+</html>
