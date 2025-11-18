@@ -233,6 +233,108 @@ microblog: True
             font-style: italic;
             font-size: 1em;
         }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.3s;
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: #151933;
+            border: 3px solid #ff6b9d;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideIn 0.3s;
+        }
+        
+        .modal-header {
+            color: #ff6b9d;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .modal-body {
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+        
+        .modal-body h4 {
+            color: #00ff88;
+            font-size: 1.2em;
+            margin: 20px 0 10px 0;
+        }
+        
+        .modal-body pre {
+            background: #0f0f1a;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border-left: 3px solid #00d4ff;
+        }
+        
+        .modal-body code {
+            color: #00d4ff;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2em;
+            color: #ff6b9d;
+            cursor: pointer;
+            background: none;
+            border: none;
+            transition: transform 0.2s;
+        }
+        
+        .close-btn:hover {
+            transform: scale(1.2);
+            color: #ff8bb5;
+        }
+        
+        .board-square:not(.locked):hover,
+        .chess-square:not(.locked):hover {
+            cursor: pointer;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 107, 157, 0.5);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideIn {
+            from { 
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
@@ -264,7 +366,7 @@ microblog: True
                 
                 <div class="board-square locked">Functions</div>
                 <div class="board-square locked">If/Else</div>
-                <div class="board-square current">Loops</div>
+                <div class="board-square current" onclick="showModal('loops')">Loops</div>
                 <div class="board-square completed">Lists</div>
                 <div class="board-square completed">Dicts</div>
                 
@@ -347,7 +449,7 @@ microblog: True
                 <div class="chess-square light locked">Magic</div>
                 <div class="chess-square dark locked">Decor</div>
                 
-                <div class="chess-square dark current">Loops</div>
+                <div class="chess-square dark current" onclick="showModal('loops')">Loops</div>
                 <div class="chess-square light completed">If/Else</div>
                 <div class="chess-square dark completed">Function</div>
                 <div class="chess-square light completed">Lists</div>
@@ -551,10 +653,87 @@ microblog: True
             <li><span class="highlight">Optimization:</span> DB indexing, SQLAlchemy lazy loading, AJAX updates, pagination</li>
             <li><span class="highlight">Mobile:</span> Responsive design, touch controls, swipe navigation, offline caching</li>
         </ul>
+    
         
         <div class="ascii-art" style="margin-top: 40px;">┌────────────────────────────────────────────────┐
 │  🎮 LEVEL UP YOUR SKILLS  •  QUEST AWAITS 🏆  │
 └────────────────────────────────────────────────┘</div>
     </div>
+    
+    <!-- Modal -->
+    <div id="modal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <div class="modal-header" id="modal-title"></div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+    
+    <script>
+        const moduleContent = {
+            'loops': {
+                title: '🔄 Loops',
+                content: `
+                    <p>Loops allow you to execute a block of code multiple times without writing it repeatedly.</p>
+                    
+                    <h4>For Loop</h4>
+                    <p>Iterates over a sequence (list, string, range, etc.):</p>
+                    <pre><code>for i in range(5):
+    print(i)  # Prints 0, 1, 2, 3, 4
+
+fruits = ['apple', 'banana', 'cherry']
+for fruit in fruits:
+    print(fruit)</code></pre>
+                    
+                    <h4>While Loop</h4>
+                    <p>Repeats while a condition is true:</p>
+                    <pre><code>count = 0
+while count < 5:
+    print(count)
+    count += 1</code></pre>
+                    
+                    <h4>Loop Control</h4>
+                    <ul>
+                        <li><span class="highlight">break</span> - Exit the loop completely</li>
+                        <li><span class="highlight">continue</span> - Skip to next iteration</li>
+                        <li><span class="highlight">else</span> - Executes when loop completes normally</li>
+                    </ul>
+                    
+                    <pre><code>for i in range(10):
+    if i == 3:
+        continue  # Skip 3
+    if i == 7:
+        break  # Stop at 7
+    print(i)  # Prints: 0, 1, 2, 4, 5, 6</code></pre>
+                `
+            }
+        };
+        
+        function showModal(module) {
+            const modal = document.getElementById('modal');
+            const title = document.getElementById('modal-title');
+            const body = document.getElementById('modal-body');
+            
+            if (moduleContent[module]) {
+                title.textContent = moduleContent[module].title;
+                body.innerHTML = moduleContent[module].content;
+                modal.classList.add('active');
+            }
+        }
+        
+        function closeModal(event) {
+            const modal = document.getElementById('modal');
+            if (!event || event.target === modal) {
+                modal.classList.remove('active');
+            }
+        }
+        
+        // Close on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
 </body>
 </html>
